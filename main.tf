@@ -18,6 +18,7 @@ locals {
 ################################################################################
 
 resource "aws_vpc" "this" {
+  #TODO: Using create or enabled vpc
   count = local.create_vpc ? 1 : 0
 
   cidr_block          = var.use_ipam_pool ? null : var.cidr
@@ -35,6 +36,7 @@ resource "aws_vpc" "this" {
   enable_classiclink             = null # https://github.com/hashicorp/terraform/issues/31730
   enable_classiclink_dns_support = null # https://github.com/hashicorp/terraform/issues/31730
 
+  #TODO: merging default and other tag options
   tags = merge(
     { "Name" = var.name },
     var.tags,
@@ -43,6 +45,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
+  #TODO: using other dependency to evalaute conditional resource creation
   count = local.create_vpc && length(var.secondary_cidr_blocks) > 0 ? length(var.secondary_cidr_blocks) : 0
 
   # Do not turn this into `local.vpc_id`
@@ -56,6 +59,7 @@ resource "aws_default_security_group" "this" {
 
   vpc_id = aws_vpc.this[0].id
 
+  #TODO: Using Dynamic Block for complex module
   dynamic "ingress" {
     for_each = var.default_security_group_ingress
     content {
