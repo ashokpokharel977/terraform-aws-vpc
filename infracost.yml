@@ -1,0 +1,7 @@
+version: 0.1
+
+projects:
+  - path: examples/simple-vpc
+    # terraform_var_files:
+    #   - my-s3.tfvars
+
